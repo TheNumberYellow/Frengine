@@ -55,6 +55,10 @@ void Window::swapBuffer() {
 	SDL_GL_SwapWindow(_window);
 }
 
+void FR::Window::clear() {
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
 void Window::clear(GLuint bufferBit) {
 	glClear(bufferBit);
 }

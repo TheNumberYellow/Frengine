@@ -12,6 +12,8 @@ namespace FR {
 
 		void create(std::string windowName, int screenWidth, int screenHeight, unsigned int windowFlags);
 		void swapBuffer();
+		
+		void clear();
 		void clear(GLuint bufferBit);
 
 		int getScreenWidth() { return _screenWidth; }

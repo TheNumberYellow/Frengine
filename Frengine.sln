@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Frengine", "Frengine\Frengine.vcxproj", "{AE8465BE-D779-4077-A9A9-FFCACD473AA5}"
 EndProject
@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FrengineTest", "FrengineTes
 	ProjectSection(ProjectDependencies) = postProject
 		{AE8465BE-D779-4077-A9A9-FFCACD473AA5} = {AE8465BE-D779-4077-A9A9-FFCACD473AA5}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessOnline", "Chess\Chess.vcxproj", "{7D5C0FCB-FB5F-4C26-87FB-5B323793D3D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,8 +37,19 @@ Global
 		{9E3AA001-BE54-4B28-AC88-19FDDCD914A6}.Release|x64.Build.0 = Release|x64
 		{9E3AA001-BE54-4B28-AC88-19FDDCD914A6}.Release|x86.ActiveCfg = Release|Win32
 		{9E3AA001-BE54-4B28-AC88-19FDDCD914A6}.Release|x86.Build.0 = Release|Win32
+		{7D5C0FCB-FB5F-4C26-87FB-5B323793D3D9}.Debug|x64.ActiveCfg = Debug|x64
+		{7D5C0FCB-FB5F-4C26-87FB-5B323793D3D9}.Debug|x64.Build.0 = Debug|x64
+		{7D5C0FCB-FB5F-4C26-87FB-5B323793D3D9}.Debug|x86.ActiveCfg = Debug|Win32
+		{7D5C0FCB-FB5F-4C26-87FB-5B323793D3D9}.Debug|x86.Build.0 = Debug|Win32
+		{7D5C0FCB-FB5F-4C26-87FB-5B323793D3D9}.Release|x64.ActiveCfg = Release|x64
+		{7D5C0FCB-FB5F-4C26-87FB-5B323793D3D9}.Release|x64.Build.0 = Release|x64
+		{7D5C0FCB-FB5F-4C26-87FB-5B323793D3D9}.Release|x86.ActiveCfg = Release|Win32
+		{7D5C0FCB-FB5F-4C26-87FB-5B323793D3D9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {732422FB-19D1-42DA-91A1-2744A360ABF0}
 	EndGlobalSection
 EndGlobal

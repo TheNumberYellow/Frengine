@@ -1,12 +1,14 @@
 #include "ShaderProgram.h"
 #include <fstream>
 #include <vector>
+#include <glm\glm.hpp>
+#include <glm\gtc\type_ptr.hpp>
 
 using namespace FR;
 
 
 ShaderProgram::ShaderProgram() {
-	_programID = glCreateProgram();
+
 }
 
 
@@ -14,7 +16,9 @@ ShaderProgram::~ShaderProgram() {
 	glDeleteProgram(_programID);
 }
 
-void ShaderProgram::compileProgram(std::string vertFilePath, std::string fragFilePath) {
+void ShaderProgram::compileProgram(std::string vertFilePath, std::string fragFilePath) {\
+	_programID = glCreateProgram();
+
 	_vertShaderID = glCreateShader(GL_VERTEX_SHADER);
 	_fragShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -35,16 +39,24 @@ void ShaderProgram::compileProgram(std::string vertFilePath, std::string fragFil
 	glDeleteShader(_fragShaderID);
 }
 
+GLuint FR::ShaderProgram::getAttribLocation(std::string attribName) {
+	return glGetAttribLocation(_programID, attribName.c_str());
+}
+
+void FR::ShaderProgram::setUniformMat4(std::string uniformName, const glm::mat4& value) {
+	glUniformMatrix4fv(glGetUniformLocation(_programID, uniformName.c_str()), 1, GL_FALSE, glm::value_ptr(value));
+}
+
 void ShaderProgram::use() {
 	glUseProgram(_programID);
 }
 
 void ShaderProgram::compileShader(std::string filePath, GLuint shaderID) {
-	const char* shaderText = loadTextFile(filePath);
-	if (shaderText == nullptr) {
-		return;
-	}
-	glShaderSource(shaderID, 1, &shaderText, NULL);
+	std::string shaderText = loadTextFile(filePath);
+
+	const char* cStrShaderText = shaderText.c_str();
+
+	glShaderSource(shaderID, 1, &cStrShaderText, NULL);
 	glCompileShader(shaderID);
 
 	GLint success = 0;
@@ -59,13 +71,11 @@ void ShaderProgram::compileShader(std::string filePath, GLuint shaderID) {
 
 		glDeleteShader(shaderID);
 
-		std::printf("Compilation of shader %s failed, error log:\n%s\n", filePath, &(errorLog[0]));
+		std::printf("||| Compilation of shader %s failed, error log:\n%s\n", filePath.c_str(), &(errorLog[0]));
 	}
-
-
 }
 
-const char* ShaderProgram::loadTextFile(std::string filePath) {
+std::string ShaderProgram::loadTextFile(std::string filePath) {
 	std::ifstream file(filePath);
 
 	if (file.fail()) {
@@ -78,6 +88,8 @@ const char* ShaderProgram::loadTextFile(std::string filePath) {
 	while (std::getline(file, line)) {
 		fileContents += line + '\n';
 	}
+
 	file.close();
-	return fileContents.c_str();
+	
+	return fileContents;
 }

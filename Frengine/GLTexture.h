@@ -15,7 +15,7 @@ namespace FR {
 		GLuint getWidth() { return _width; }
 		GLuint getHeight() { return _height; }
 
-		void setFormat(GLenum format);
+		void setFormat(GLuint format);
 
 	private:
 		// OpenGL handle for texture

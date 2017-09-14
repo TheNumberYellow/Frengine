@@ -24,5 +24,6 @@ namespace FR {
 	private:
 		static std::map<std::string, Texture2D*> _textures;
 		static std::map<std::string, ShaderProgram*> _shaders;
+
 	};
 }

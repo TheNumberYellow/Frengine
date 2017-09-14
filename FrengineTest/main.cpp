@@ -1,145 +1,111 @@
 #include <Frengine\Window.h>
 #include <Frengine\ResourceManager.h>
+#include <Frengine\Sprite.h>
 
-#include <string>
-#include <vector>
+#include "Server.h"
+#include "Client.h"
 
-#include <GL\glew.h>
-#include <SDL2\SDL.h>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <iostream>
 
 int main(int argc, char** argv) {
 
+	//printf("Size of Char: %u\n", sizeof(char));
+	//printf("Size of glm::vec2: %u\n", sizeof(glm::vec2));
+	//printf("Size of float: %u\n", sizeof(float));
+
+
+
+	std::string input;
+	do {
+		printf("Client(c) or Server(s)?\n");
+		std::getline(std::cin, input);
+	} while (input != "c" && input != "s");
+
+	if (input == "c") {
+		Client client;
+		client.run();
+	}
+	else {
+		Server server;
+		server.run();
+	}
+
+	printf("Enter anything to quit.\n");
+	int n;
+	std::cin >> n;
+
+	return 0;
+	
+
+	/*
 	FR::Window window;
 	
-	window.create("TestFrengine", 800, 600, NULL);
+	window.create("TestFrengine", 1600, 1200, NULL);
 
 	FR::ResourceManager::loadTexture("Images/testImage0.png", "testImage0");
 	FR::ResourceManager::loadTexture("Images/testImage1.png", "testImage1");
 	FR::ResourceManager::loadTexture("Images/testImage2.png", "testImage2");
-	
-	
-	GLfloat vertices[] = {
-	   -1.0, -1.0,  0.0, 0.0, 0.0,
-		0.0,  1.0,	0.0,  0.5,  1.0,
-		1.0, -1.0,	0.0,  1.0, 0.0
-	};
-
-	const char* vertShader =
-		"#version 450\n"
-		"layout(location = 0) in vec3 vertexPosition;\n"
-		"layout(location = 1) in vec2 vertexUV;\n"
-		"out vec2 fragmentUV;\n"
-		"void main(){\n"
-		"	fragmentUV = vertexUV;\n"
-		"	gl_Position = vec4(vertexPosition, 1.0);\n"
-		"}\0";
-
-	const char* fragShader =
-		"#version 450\n"
-		"in vec2 fragmentUV;\n"
-		"out vec4 fragColour;\n"
-		"uniform sampler2D sampler;\n"
-		"void main(){\n"
-		"	fragColour = texture(sampler, fragmentUV);\n"
-		"}\0";
-
-	int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertShader, NULL);
-	glCompileShader(vertexShader);
-
-
-	GLint success = 0;
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-
-	if (success == GL_FALSE) {
-		GLint maxLength = 0;
-
-		glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-		//The maxLength includes the NULL character
-		std::vector<char> errorLog(maxLength);
-		glGetShaderInfoLog(vertexShader, maxLength, &maxLength, &errorLog[0]);
-
-		//Exit with failure
-		glDeleteShader(vertexShader); //Don't leak the shader
-
-		std::printf("%s\n", &errorLog[0]);
-	}
-
-	int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragShader, NULL);
-	glCompileShader(fragmentShader);
-
-	success = 0;
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-
-	if (success == GL_FALSE) {
-		GLint maxLength = 0;
-
-		glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-		//The maxLength includes the NULL character
-		std::vector<char> errorLog(maxLength);
-		glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, &errorLog[0]);
-
-		//Exit with failure
-		glDeleteShader(fragmentShader); //Don't leak the shader
-
-		std::printf("%s\n", &errorLog[0]);
-	}
-
-	int shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
-
-	unsigned int VBO, VAO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-
-	glBindVertexArray(VAO);
-	
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	
-	glUseProgram(shaderProgram);
-	
-	GLuint posAttrib = glGetAttribLocation(shaderProgram, "vertexPosition");
-	glEnableVertexAttribArray(posAttrib);
-	glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0);
-	
-	GLuint texAttrib = glGetAttribLocation(shaderProgram, "vertexUV");
-	glEnableVertexAttribArray(texAttrib);
-	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-	
-
-	FR::Texture2D* texture0 = FR::ResourceManager::getTexture("testImage2");
-
-	texture0->bind();
-
-	FR::Texture2D* texture1 = FR::ResourceManager::getTexture("testImage0");
-
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	while (true) {
+	FR::ResourceManager::loadTexture("Images/testImage3.png", "testImage3");
 		
-		glUseProgram(shaderProgram);
-		glBindVertexArray(VAO);
+	FR::ResourceManager::loadShaderProgram("Shaders/testShader.vert", "Shaders/testShader.frag", "shader0");
+
+	FR::Texture2D* texture0 = FR::ResourceManager::getTexture("testImage0");
+	FR::Texture2D* texture1 = FR::ResourceManager::getTexture("testImage1");
+	FR::Texture2D* texture2 = FR::ResourceManager::getTexture("testImage2");
+	FR::Texture2D* texture3 = FR::ResourceManager::getTexture("testImage3");
+
+	FR::ShaderProgram* shader0 = FR::ResourceManager::getShader("shader0");
+
+	FR::Sprite sprite0;
+	sprite0.create(glm::vec2(0, 0), glm::vec2(800, 600), texture0);
+
+	FR::Sprite sprite1;
+	sprite1.create(glm::vec2(800, 0), glm::vec2(800, 600), texture1);
+	
+	FR::Sprite sprite2;
+	sprite2.create(glm::vec2(800, 600), glm::vec2(800, 600), texture2);
+	
+	FR::Sprite sprite3;
+	sprite3.create(glm::vec2(0, 600), glm::vec2(800, 600), texture3); 
+
+
+	glm::mat4 projectionMatrix = glm::ortho(0.0f, 1600.0f, 0.0f, 1200.0f);
+
+	shader0->use();
+	shader0->setUniformMat4("projection", projectionMatrix);
+
+
+	bool running = true;
+	while (running) {
+		SDL_Event event;
+		while (SDL_PollEvent(&event)) {
+			switch (event.type) {
+			case SDL_QUIT:
+				running = false;
+				break;
+			}
+		}
+
+		window.clear();
 		
-		window.clear(GL_COLOR_BUFFER_BIT);
 		// DRAW
-		texture1->bind();
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-
-		texture0->bind();
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		sprite0.draw(shader0);
+		sprite1.draw(shader0);
+		sprite2.draw(shader0);
+		sprite3.draw(shader0);
 		// END DRAW
+
 		window.swapBuffer();
+
+		sprite3.setPos(sprite3.getPos() + glm::vec2(1, 0));
+
+		FR::ResourceManager::unuseShader();
+		FR::ResourceManager::unbindTexture();
 	}
 
-	return 0;
+	FR::ResourceManager::unuseShader();
+	FR::ResourceManager::unbindTexture();
+	*/
 }
