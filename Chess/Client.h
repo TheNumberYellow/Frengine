@@ -11,6 +11,8 @@
 #define SERVER_PORT 8392
 #define BUFFER_SIZE 1400
 
+#define PI 3.14159265359
+
 class Client {
 public:
 	Client();
@@ -28,6 +30,7 @@ private:
 
 	FR::Window window;
 	FR::ShaderProgram* shader0;
+	//FR::Camera2D camera;
 
 	std::map<int, FR::Sprite> players;
 

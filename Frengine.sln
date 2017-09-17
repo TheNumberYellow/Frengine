@@ -11,6 +11,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FrengineTest", "FrengineTes
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessOnline", "Chess\Chess.vcxproj", "{7D5C0FCB-FB5F-4C26-87FB-5B323793D3D9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AE8465BE-D779-4077-A9A9-FFCACD473AA5} = {AE8465BE-D779-4077-A9A9-FFCACD473AA5}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -15,6 +15,7 @@ Client::~Client() {
 }
 
 void Client::run() {
+
 	initSystems();
 
 	std::string ipStr;
@@ -44,11 +45,11 @@ void Client::run() {
 		return;
 	}
 
-	initWindow();
+	//initWindow();
 
 	while (running) {
+		
 		unsigned int frameStartTime = SDL_GetTicks();
-
 		// Take input
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
@@ -120,7 +121,7 @@ void Client::run() {
 
 						if (players.find(ID) == players.end()) {
 							FR::Sprite newSprite;
-							newSprite.create(glm::vec2(posX, posY), glm::vec2(100, 100), pawnTexture);
+							newSprite.create(glm::vec2(posX, posY), glm::vec2(100, 100), 0, pawnTexture);
 							players[ID] = newSprite;
 						}
 						else {
@@ -139,15 +140,31 @@ void Client::run() {
 		// Draw
 		window.clear();
 
+		//glm::vec3 _cameraPosition(glm::vec3(0.0, 0.0, 3.0));
+		//glm::vec3 _cameraFront(glm::vec3(0.0, 0.0, -1.0));
+		//glm::vec3 _cameraUp(glm::vec3(0.0, 1.0, 0.0));
+		
+		//glm::mat4 view = glm::lookAt(_cameraPosition, _cameraPosition + _cameraFront, _cameraUp);
+
+		//shader0->setUniformMat4("view", view);
+
+		//camera.update();
+
 		board.draw(shader0);
 
 		for (auto it = players.begin(); it != players.end(); it++) {
 			it->second.draw(shader0);
 		}
+		
+		me.setRot(me.getRot() + 0.01);
+		
 		me.draw(shader0);
 
 		window.swapBuffer();
 
+		FR::ResourceManager::unuseShader();
+		FR::ResourceManager::unbindTexture();
+		
 		unsigned int frameEndTime = SDL_GetTicks();
 
 		unsigned int frameTime = frameEndTime - frameStartTime;
@@ -157,12 +174,14 @@ void Client::run() {
 		if (frameTime < 17) {
 			SDL_Delay(17 - frameTime);
 		}
+		
 	}
 	deInitSystems();
 }
 
 void Client::initSystems() {
-	SDL_Init(SDL_INIT_EVERYTHING);
+	//SDL_Init(SDL_INIT_EVERYTHING);
+	initWindow();
 	SDLNet_Init();
 
 	socketSet = SDLNet_AllocSocketSet(1);
@@ -186,12 +205,14 @@ void Client::initWindow() {
 	shader0->use();
 	shader0->setUniformMat4("projection", projectionMatrix);
 
+	//camera.attach(shader0);
+
 	FR::ResourceManager::loadTexture("Images/Chess_Board.png", "board");
 	FR::ResourceManager::loadTexture("Images/White_Pawn.png", "pawn");
 
 	boardTexture = FR::ResourceManager::getTexture("board");
 	pawnTexture = FR::ResourceManager::getTexture("pawn");
 
-	me.create(glm::vec2(0, 0), glm::vec2(100, 100), pawnTexture);
-	board.create(glm::vec2(0, 0), glm::vec2(800, 800), boardTexture);
+	me.create(glm::vec2(0, 0), glm::vec2(100, 100), 0, pawnTexture);
+	board.create(glm::vec2(0, 0), glm::vec2(800, 800), 0, boardTexture);
 }

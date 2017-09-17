@@ -38,7 +38,7 @@ private:
 	SDLNet_SocketSet _socketSet;
 
 	int currentID = 0;
-	int playerNum = 0;
+	unsigned int playerNum = 0;
 
 	char buffer[BUFFER_SIZE];
 };

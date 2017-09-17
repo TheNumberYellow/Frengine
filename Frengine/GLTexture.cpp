@@ -22,6 +22,8 @@ void Texture2D::generate(unsigned char* img, GLuint width, GLuint height) {
 	_width = width;
 	_height = height;
 	
+	printf("Generated texture with width: %i and height: %i\n", width, height);
+
 	// Bind to texture
 	glBindTexture(GL_TEXTURE_2D, _id);
 

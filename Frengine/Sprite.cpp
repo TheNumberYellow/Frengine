@@ -9,9 +9,17 @@ Sprite::Sprite() {
 Sprite::~Sprite() {
 }
 
-void FR::Sprite::create(glm::vec2 position, glm::vec2 size, Texture2D* texture) {
+void FR::Sprite::create(glm::vec2 position, glm::vec2 size, GLfloat rotation, Texture2D* texture) {
 	_position = glm::vec3(position.x, position.y, 0);
+	_rotation = rotation;
+	_scale = glm::vec3(size.x, size.y, 1.0);
+
+	// Set rotation vector for 2D rotations ("towards screen")
+	_rotationVector = glm::vec3(0.0, 0.0, 1.0);
 	
+
+	_rotateMode = CENTER;
+
 	// Create + Bind vertex array object
 	glGenVertexArrays(1, &_VAO);
 	glBindVertexArray(_VAO);
@@ -24,6 +32,10 @@ void FR::Sprite::create(glm::vec2 position, glm::vec2 size, Texture2D* texture) 
 
 	GLfloat vertices[] = {
 		// Positions			// Tex Coords
+		//0.0f,	0.0f,	0.0f,	0.0f,	0.0f,
+		//1.0f,	0.0f,	0.0f,	1.0f,	0.0f,
+		//1.0f,	1.0f,	0.0f,	1.0f,	1.0f,
+		//0.0f,	1.0f,	0.0f,	0.0f,	1.0f
 		0.0f,	0.0f,	0.0f,	0.0f,	0.0f,
 		size.x, 0.0f,	0.0f,	1.0f,	0.0f,
 		size.x, size.y, 0.0f,	1.0f,	1.0f,
@@ -74,4 +86,20 @@ void FR::Sprite::setPos(glm::vec2 newPos) {
 
 glm::vec2 FR::Sprite::getPos() {
 	return glm::vec2(_position.x, _position.y);
+}
+
+void FR::Sprite::setRot(GLfloat newRot) {
+	_rotation = newRot;
+}
+
+GLfloat FR::Sprite::getRot() {
+	return _rotation;
+}
+
+void FR::Sprite::setScale(glm::vec2 newScale) {
+	_scale = glm::vec3(newScale.x, newScale.y, 1.0);
+}
+
+glm::vec2 FR::Sprite::getScale() {
+	return glm::vec2(_scale.x, _scale.y);
 }

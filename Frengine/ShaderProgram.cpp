@@ -79,7 +79,7 @@ std::string ShaderProgram::loadTextFile(std::string filePath) {
 	std::ifstream file(filePath);
 
 	if (file.fail()) {
-		printf("Frengine Error: ShaderProgram Error: Could not find specified file %s\n", filePath);
+		printf("Frengine Error: ShaderProgram Error: Could not find specified file %s\n", filePath.c_str());
 		return nullptr;
 	}
 

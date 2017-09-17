@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
 	//printf("Size of float: %u\n", sizeof(float));
 
 
-
+	/*
 	std::string input;
 	do {
 		printf("Client(c) or Server(s)?\n");
@@ -38,8 +38,8 @@ int main(int argc, char** argv) {
 
 	return 0;
 	
-
-	/*
+	*/
+	
 	FR::Window window;
 	
 	window.create("TestFrengine", 1600, 1200, NULL);
@@ -59,16 +59,16 @@ int main(int argc, char** argv) {
 	FR::ShaderProgram* shader0 = FR::ResourceManager::getShader("shader0");
 
 	FR::Sprite sprite0;
-	sprite0.create(glm::vec2(0, 0), glm::vec2(800, 600), texture0);
+	sprite0.create(glm::vec2(0, 0), glm::vec2(800, 600), 0, texture0);
 
 	FR::Sprite sprite1;
-	sprite1.create(glm::vec2(800, 0), glm::vec2(800, 600), texture1);
+	sprite1.create(glm::vec2(800, 0), glm::vec2(800, 600), 0, texture1);
 	
 	FR::Sprite sprite2;
-	sprite2.create(glm::vec2(800, 600), glm::vec2(800, 600), texture2);
+	sprite2.create(glm::vec2(800, 600), glm::vec2(800, 600), 0, texture2);
 	
 	FR::Sprite sprite3;
-	sprite3.create(glm::vec2(0, 600), glm::vec2(800, 600), texture3); 
+	sprite3.create(glm::vec2(0, 600), glm::vec2(800, 600), 0, texture3); 
 
 
 	glm::mat4 projectionMatrix = glm::ortho(0.0f, 1600.0f, 0.0f, 1200.0f);
@@ -90,6 +90,8 @@ int main(int argc, char** argv) {
 
 		window.clear();
 		
+		sprite0.setRot(sprite0.getRot() + 0.01);
+
 		// DRAW
 		sprite0.draw(shader0);
 		sprite1.draw(shader0);
@@ -107,5 +109,6 @@ int main(int argc, char** argv) {
 
 	FR::ResourceManager::unuseShader();
 	FR::ResourceManager::unbindTexture();
-	*/
+	
+	return 0;
 }
