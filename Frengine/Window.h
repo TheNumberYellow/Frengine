@@ -19,6 +19,8 @@ namespace FR {
 		int getScreenWidth() { return _screenWidth; }
 		int getScreenHeight() { return _screenHeight; }
 
+		SDL_Window* getWindow();
+
 	private:
 		SDL_Window* _window;
 		int _screenWidth, _screenHeight;

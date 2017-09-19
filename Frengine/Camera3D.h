@@ -5,19 +5,28 @@
 #include "ShaderProgram.h"
 
 namespace FR {
-	class Camera2D {
+	class Camera3D {
 	public:
-		Camera2D();
-		~Camera2D();
+		Camera3D();
+		~Camera3D();
 
 		void attach(ShaderProgram* shader);
 		void update();
 
-		void setCamPos(glm::vec2 newPos);
-		glm::vec2 getCamPos();
+		void setCamPos(glm::vec3 newPos);
+		glm::vec3 getCamPos();
+
+		void setCamFront(glm::vec3 newFront);
+		glm::vec3 getCamFront();
+
+		void setCamUp(glm::vec3 newUp);
+		glm::vec3 getCamUp();
 
 	private:
 		ShaderProgram* _shader;
+
+		GLfloat _yaw;
+		GLfloat _pitch;
 
 		glm::vec3 _cameraPosition;
 		glm::vec3 _cameraFront;

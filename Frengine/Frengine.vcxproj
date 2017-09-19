@@ -120,9 +120,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera2D.h" />
+    <ClInclude Include="Camera3D.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="Errors.h" />
     <ClInclude Include="GLTexture.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Sprite.h" />
@@ -132,9 +134,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera2D.cpp" />
+    <ClCompile Include="Camera3D.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="Errors.cpp" />
     <ClCompile Include="GLTexture.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Sprite.cpp" />

@@ -21,6 +21,13 @@ namespace FR {
 }
 
 namespace FR {
+	typedef struct {
+		GLfloat* vertices;
+		GLuint* elements;
+	} VerticesInfo;
+}
+
+namespace FR {
 	class Drawable {
 	public:
 		Drawable();
@@ -39,8 +46,10 @@ namespace FR {
 
 		glm::vec3 _position;
 		glm::vec3 _scale;
-		GLfloat _rotation;
-		glm::vec3 _rotationVector;
+
+		GLfloat _rotationX;
+		GLfloat _rotationY;
+		GLfloat _rotationZ;
 
 		Texture2D* _texture;
 	};

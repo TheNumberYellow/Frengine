@@ -7,8 +7,8 @@ FR::Texture2D::Texture2D() :
 	_width(0), _height(0),
 	_internalFormat(GL_RGB),
 	_imageFormat(GL_RGB),
-	_textureMinFilter(GL_NEAREST),
-	_textureMagFilter(GL_NEAREST)
+	_textureMinFilter(GL_LINEAR),
+	_textureMagFilter(GL_LINEAR)
 {
 	glGenTextures(1, &_id);
 	printf("Texture ID: %u\n", _id);
@@ -22,8 +22,6 @@ void Texture2D::generate(unsigned char* img, GLuint width, GLuint height) {
 	_width = width;
 	_height = height;
 	
-	printf("Generated texture with width: %i and height: %i\n", width, height);
-
 	// Bind to texture
 	glBindTexture(GL_TEXTURE_2D, _id);
 

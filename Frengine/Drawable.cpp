@@ -13,10 +13,7 @@ Drawable::~Drawable() {
 }
 
 void Drawable::draw(ShaderProgram* shader) {
-	//printf("Drawing\n");
-	
 	shader->use();
-	//TODO: Apply uniforms
 
 	_texture->bind();
 
@@ -26,20 +23,26 @@ void Drawable::draw(ShaderProgram* shader) {
 	glm::mat4 scale = glm::scale(glm::mat4(), _scale);
 	glm::mat4 rotation;
 
-	//switch (_rotateMode) {
-	//case BOTTOM_LEFT:
-	//	rotation = glm::rotate(glm::mat4(), _rotation, _rotationVector);
-	//	break;
-	//case CENTER:
-	//	glm::mat4 halfTranslation = glm::translate(glm::mat4(), glm::vec3(0.5, 0.5, 0.5));
-	//	rotation = glm::rotate(halfTranslation, _rotation, _rotationVector);
-	//	rotation = glm::translate(rotation, glm::vec3(-0.5, -0.5, -0.5));
-	//	break;
-	//}
-	
-	model = translation * scale * rotation;
+	switch (_rotateMode) {
+	case BOTTOM_LEFT:
+		rotation = glm::rotate(glm::mat4(), _rotationX, glm::vec3(1.0, 0.0, 0.0));
+		rotation = glm::rotate(rotation, _rotationY, glm::vec3(0.0, 1.0, 0.0));
+		rotation = glm::rotate(rotation, _rotationZ, glm::vec3(1.0, 0.0, 1.0));
+		break;
+	case CENTER:
+		glm::mat4 halfTranslation = glm::translate(glm::mat4(), glm::vec3(0.5, 0.5, 0.5));
+		
+		rotation = glm::rotate(halfTranslation, _rotationX, glm::vec3(1.0, 0.0, 0.0));
+		rotation = glm::rotate(rotation, _rotationY, glm::vec3(0.0, 1.0, 0.0));
+		rotation = glm::rotate(rotation, _rotationZ, glm::vec3(0.0, 0.0, 1.0));
 
-	shader->setUniformMat4("model", translation);
+		rotation = glm::translate(rotation, glm::vec3(-0.5, -0.5, -0.5));
+		break;
+	}
+	
+	model = translation * rotation * scale;
+
+	shader->setUniformMat4("model", model);
 
 	// Determine draw mode
 	GLenum glDrawMode;
@@ -70,5 +73,5 @@ void Drawable::setPos(glm::vec3 newPos) {
 }
 
 void FR::Drawable::setRot(GLfloat newRot) {
-	_rotation = newRot;
+	//_rotation = newRot;
 }

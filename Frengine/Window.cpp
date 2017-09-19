@@ -62,3 +62,7 @@ void FR::Window::clear() {
 void Window::clear(GLuint bufferBit) {
 	glClear(bufferBit);
 }
+
+SDL_Window* FR::Window::getWindow() {
+	return _window;
+}

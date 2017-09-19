@@ -5,6 +5,9 @@
 #include <string>
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm\gtx\rotate_vector.hpp>
+#include <glm\gtx\perpendicular.hpp>
+
 
 Client::Client() {
 
@@ -45,7 +48,9 @@ void Client::run() {
 		return;
 	}
 
-	//initWindow();
+	initWindow();
+
+
 
 	while (running) {
 		
@@ -60,16 +65,32 @@ void Client::run() {
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.sym) {
 				case SDLK_LEFT:
-					mySpeed.x = -5;
+					mySpeed.x = -0.05;
 					break;
 				case SDLK_RIGHT:
-					mySpeed.x = 5;
+					mySpeed.x = 0.05;
 					break;
 				case SDLK_UP:
-					mySpeed.y = 5;
+					mySpeed.y = 0.05;
 					break;
 				case SDLK_DOWN:
-					mySpeed.y = -5;
+					mySpeed.y = -0.05;
+					break;
+				case SDLK_ESCAPE:
+					running = false;
+					break;
+
+				case SDLK_w:
+					forwardSpeed = 0.1f;
+					break;
+				case SDLK_s:
+					forwardSpeed = -0.1f;
+					break;
+				case SDLK_a:
+					strafeSpeed = -0.1f;
+					break;
+				case SDLK_d:
+					strafeSpeed = 0.1f;
 					break;
 				}
 				break;
@@ -86,6 +107,15 @@ void Client::run() {
 					break;
 				case SDLK_DOWN:
 					mySpeed.y = 0;
+					break;
+
+				case SDLK_w:
+				case SDLK_s:
+					forwardSpeed = 0.0f;
+					break;
+				case SDLK_a:
+				case SDLK_d:
+					strafeSpeed = 0.0f;
 					break;
 				}
 			}	
@@ -140,15 +170,29 @@ void Client::run() {
 		// Draw
 		window.clear();
 
-		//glm::vec3 _cameraPosition(glm::vec3(0.0, 0.0, 3.0));
-		//glm::vec3 _cameraFront(glm::vec3(0.0, 0.0, -1.0));
-		//glm::vec3 _cameraUp(glm::vec3(0.0, 1.0, 0.0));
-		
-		//glm::mat4 view = glm::lookAt(_cameraPosition, _cameraPosition + _cameraFront, _cameraUp);
+		int mouseX, mouseY;
 
-		//shader0->setUniformMat4("view", view);
+		SDL_PumpEvents();
+		SDL_GetMouseState(&mouseX, &mouseY);
 
-		//camera.update();
+
+		SDL_WarpMouseInWindow(window.getWindow(), 800 / 2, 800 / 2);
+
+		int mouseMoveX = (800 / 2) - mouseX;
+		int mouseMoveY = (800 / 2) - mouseY;
+
+		// Move X
+		camera.setCamFront(glm::rotate(camera.getCamFront(), glm::radians(0.1f * mouseMoveX), camera.getCamUp()));
+
+		// Move Y
+		glm::vec3 perpVec = glm::cross(camera.getCamFront(), camera.getCamUp());
+		camera.setCamFront(glm::rotate(camera.getCamFront(), glm::radians(0.1f * mouseMoveY), perpVec));
+
+		// Move cam pos
+		camera.setCamPos(camera.getCamPos() + (forwardSpeed * camera.getCamFront()));
+		camera.setCamPos(camera.getCamPos() + glm::normalize(glm::cross(camera.getCamFront(), camera.getCamUp())) * strafeSpeed);
+
+		camera.update();
 
 		board.draw(shader0);
 
@@ -156,9 +200,10 @@ void Client::run() {
 			it->second.draw(shader0);
 		}
 		
-		me.setRot(me.getRot() + 0.01);
+		me.setRot(me.getRot() + 0.1);
 		
 		me.draw(shader0);
+		testMesh.draw(shader0);
 
 		window.swapBuffer();
 
@@ -180,8 +225,7 @@ void Client::run() {
 }
 
 void Client::initSystems() {
-	//SDL_Init(SDL_INIT_EVERYTHING);
-	initWindow();
+	SDL_Init(SDL_INIT_EVERYTHING);
 	SDLNet_Init();
 
 	socketSet = SDLNet_AllocSocketSet(1);
@@ -201,18 +245,49 @@ void Client::initWindow() {
 	FR::ResourceManager::loadShaderProgram("Shaders/testShader.vert", "Shaders/testShader.frag", "shader0");
 	shader0 = FR::ResourceManager::getShader("shader0");
 
-	glm::mat4 projectionMatrix = glm::ortho(0.0f, 800.0f, 0.0f, 800.0f);
-	shader0->use();
-	shader0->setUniformMat4("projection", projectionMatrix);
+	glm::mat4 projectionMatrixOrtho = glm::ortho(0.0f, 800.0f, 0.0f, 800.0f);
+	glm::mat4 projectionMatrixPerspective = glm::perspective(glm::radians(45.0f), 800.0f / 800.0f, 0.1f, 10000.0f);
+	
+	glm::mat4 projectionMatrix = projectionMatrixPerspective * projectionMatrixOrtho;
+	//projectionMatrix = projectionMatrixP * projectionMatrix;
 
-	//camera.attach(shader0);
+	shader0->use();
+	shader0->setUniformMat4("projection", projectionMatrixPerspective);
+
+	camera.attach(shader0);
 
 	FR::ResourceManager::loadTexture("Images/Chess_Board.png", "board");
 	FR::ResourceManager::loadTexture("Images/White_Pawn.png", "pawn");
+	FR::ResourceManager::loadTexture("Images/Black_Pawn.png", "blackPawn");
 
 	boardTexture = FR::ResourceManager::getTexture("board");
 	pawnTexture = FR::ResourceManager::getTexture("pawn");
+	blackPawnTexture = FR::ResourceManager::getTexture("blackPawn");
 
-	me.create(glm::vec2(0, 0), glm::vec2(100, 100), 0, pawnTexture);
-	board.create(glm::vec2(0, 0), glm::vec2(800, 800), 0, boardTexture);
+	myPosition.x = 0;
+	myPosition.y = 0;
+
+	me.create(myPosition, glm::vec2(1, 1), 0, pawnTexture);
+	board.create(glm::vec2(0, 0), glm::vec2(8, 8), 0, boardTexture);
+
+	SDL_SetWindowGrab(window.getWindow(), SDL_TRUE);
+	SDL_WarpMouseInWindow(window.getWindow(), 800 / 2, 800 / 2);
+	SDL_ShowCursor(SDL_DISABLE);
+
+	playerInfo.vertices = new GLfloat[20]{
+		// Positions			// Tex Coords
+		0.0f,	0.0f,	0.0f,	0.0f,	0.0f,
+		1.0f,	0.0f,	0.0f,	1.0f,	0.0f,
+		1.0f,	1.0f,	0.0f,	1.0f,	1.0f,
+		0.0f,	1.0f,	0.0f,	0.0f,	1.0f
+	};
+	playerInfo.elements = new GLuint[6]{
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	
+	testMesh.create(playerInfo, 20, 6, glm::vec3(2.0f, 2.0f, 1.0f), glm::vec3(4.0f, 4.0f, 4.0f), 0, 0, 0, pawnTexture);
+
+	//glEnable(GL_DEPTH_TEST);
 }
