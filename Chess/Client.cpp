@@ -118,6 +118,15 @@ void Client::run() {
 					strafeSpeed = 0.0f;
 					break;
 				}
+			case SDL_WINDOWEVENT:
+				switch (event.window.event) {
+				case SDL_WINDOWEVENT_FOCUS_LOST:
+					_hasFocus = false;
+					break;
+				case SDL_WINDOWEVENT_FOCUS_GAINED:
+					_hasFocus = true;
+					break;
+				}
 			}	
 		}
 
@@ -125,7 +134,7 @@ void Client::run() {
 		me.setPos(myPosition);
 
 		// Send  position to server
-		sprintf_s(buffer, "1 %d %d", (int)myPosition.x, (int)myPosition.y);
+		sprintf_s(buffer, "1 %f %f %f", myPosition.x, myPosition.y, me.getRot());
 		SDLNet_TCP_Send(serverSocket, buffer, strlen(buffer) + 1);
 
 
@@ -146,16 +155,19 @@ void Client::run() {
 
 				if (numOtherPlayers > 0 && numOtherPlayers < 10) {	// TODO: figure out why when first connecting client receives tail end of another tcp packet... test if this is only when using same computer for client + server etc.
 					for (int i = 0; i < numOtherPlayers; i++) {		// Good thing to test next is which packet it's actually getting the tail end of - ie. is it getting the end of a packet it's actually supposed to be getting in the first place?
-						int ID, posX, posY, current;				// If it's not even supposed to be getting the message in the first place there's a good chance that this is a problem that only exists when using multiple clients on the same machine.
-						sscanf_s(buffer + position, " %d %d %d %n", &ID, &posX, &posY, &current);
+						float posX, posY, rotation;					// If it's not even supposed to be getting the message in the first place there's a good chance that this is a problem that only exists when using multiple clients on the same machine.
+						int ID, current;
+						sscanf_s(buffer + position, " %d %f %f %f %n", &ID, &posX, &posY, &rotation, &current);
 
 						if (players.find(ID) == players.end()) {
 							FR::Sprite newSprite;
-							newSprite.create(glm::vec2(posX, posY), glm::vec2(100, 100), 0, pawnTexture);
+							printf("Creating sprite at X: %f Y: %f\n", posX, posY);
+							newSprite.create(glm::vec2(posX, posY), glm::vec2(1, 1), rotation, pawnTexture);
 							players[ID] = newSprite;
 						}
 						else {
 							players[ID].setPos(glm::vec2(posX, posY));
+							players[ID].setRot(rotation);
 						}
 
 						position += current;
@@ -170,28 +182,29 @@ void Client::run() {
 		// Draw
 		window.clear();
 
-		int mouseX, mouseY;
+		if (_hasFocus) {
+			int mouseX, mouseY;
 
-		SDL_PumpEvents();
-		SDL_GetMouseState(&mouseX, &mouseY);
+			SDL_PumpEvents();
+			SDL_GetMouseState(&mouseX, &mouseY);
 
 
-		SDL_WarpMouseInWindow(window.getWindow(), 800 / 2, 800 / 2);
+			SDL_WarpMouseInWindow(window.getWindow(), _screenWidth / 2, _screenWidth / 2);
 
-		int mouseMoveX = (800 / 2) - mouseX;
-		int mouseMoveY = (800 / 2) - mouseY;
+			int mouseMoveX = (_screenWidth / 2) - mouseX;
+			int mouseMoveY = (_screenHeight / 2) - mouseY;
 
-		// Move X
-		camera.setCamFront(glm::rotate(camera.getCamFront(), glm::radians(0.1f * mouseMoveX), camera.getCamUp()));
+			// Move X
+			camera.setCamFront(glm::rotate(camera.getCamFront(), glm::radians(0.1f * mouseMoveX), camera.getCamUp()));
 
-		// Move Y
-		glm::vec3 perpVec = glm::cross(camera.getCamFront(), camera.getCamUp());
-		camera.setCamFront(glm::rotate(camera.getCamFront(), glm::radians(0.1f * mouseMoveY), perpVec));
+			// Move Y
+			glm::vec3 perpVec = glm::cross(camera.getCamFront(), camera.getCamUp());
+			camera.setCamFront(glm::rotate(camera.getCamFront(), glm::radians(0.1f * mouseMoveY), perpVec));
 
-		// Move cam pos
-		camera.setCamPos(camera.getCamPos() + (forwardSpeed * camera.getCamFront()));
-		camera.setCamPos(camera.getCamPos() + glm::normalize(glm::cross(camera.getCamFront(), camera.getCamUp())) * strafeSpeed);
-
+			// Move cam pos
+			camera.setCamPos(camera.getCamPos() + (forwardSpeed * camera.getCamFront()));
+			camera.setCamPos(camera.getCamPos() + glm::normalize(glm::cross(camera.getCamFront(), camera.getCamUp())) * strafeSpeed);
+		}
 		camera.update();
 
 		board.draw(shader0);
@@ -241,12 +254,12 @@ void Client::deInitSystems() {
 }
 
 void Client::initWindow() {
-	window.create("Online", 800, 800, NULL);
+	window.create("Online", _screenWidth, _screenHeight, NULL);
 	FR::ResourceManager::loadShaderProgram("Shaders/testShader.vert", "Shaders/testShader.frag", "shader0");
 	shader0 = FR::ResourceManager::getShader("shader0");
 
-	glm::mat4 projectionMatrixOrtho = glm::ortho(0.0f, 800.0f, 0.0f, 800.0f);
-	glm::mat4 projectionMatrixPerspective = glm::perspective(glm::radians(45.0f), 800.0f / 800.0f, 0.1f, 10000.0f);
+	glm::mat4 projectionMatrixOrtho = glm::ortho(0.0f, (float)_screenWidth, 0.0f, (float)_screenHeight);
+	glm::mat4 projectionMatrixPerspective = glm::perspective(glm::radians(45.0f), (float)_screenWidth / (float)_screenHeight, 0.1f, 10000.0f);
 	
 	glm::mat4 projectionMatrix = projectionMatrixPerspective * projectionMatrixOrtho;
 	//projectionMatrix = projectionMatrixP * projectionMatrix;
@@ -255,6 +268,7 @@ void Client::initWindow() {
 	shader0->setUniformMat4("projection", projectionMatrixPerspective);
 
 	camera.attach(shader0);
+	camera.setCamPos(glm::vec3(4.0, 4.0, 9.6));
 
 	FR::ResourceManager::loadTexture("Images/Chess_Board.png", "board");
 	FR::ResourceManager::loadTexture("Images/White_Pawn.png", "pawn");
@@ -271,7 +285,7 @@ void Client::initWindow() {
 	board.create(glm::vec2(0, 0), glm::vec2(8, 8), 0, boardTexture);
 
 	SDL_SetWindowGrab(window.getWindow(), SDL_TRUE);
-	SDL_WarpMouseInWindow(window.getWindow(), 800 / 2, 800 / 2);
+	SDL_WarpMouseInWindow(window.getWindow(), _screenWidth / 2, _screenHeight / 2);
 	SDL_ShowCursor(SDL_DISABLE);
 
 	playerInfo.vertices = new GLfloat[20]{

@@ -31,7 +31,7 @@ void Server::run() {
 		if (tempSocket) {
 			if (playerNum < MAX_PLAYERS) {
 				SDLNet_TCP_AddSocket(_socketSet, tempSocket);
-				_players.emplace_back(tempSocket, currentID, SDL_GetTicks(), glm::vec2(0, 0));
+				_players.emplace_back(tempSocket, currentID, SDL_GetTicks(), glm::vec2(0, 0), 0);
 				playerNum++;
 				sprintf_s(buffer, "0 %d \n", currentID);
 				printf("New connection with ID %d.\n", currentID);
@@ -53,9 +53,10 @@ void Server::run() {
 						playerNum--;
 					}
 					else {
-						int posX, posY;
-						sscanf_s(buffer, "1 %d %d", &posX, &posY);
+						float posX, posY, rotate;
+						sscanf_s(buffer, "1 %f %f %f", &posX, &posY, &rotate);
 						_players[i].position = glm::vec2(posX, posY);
+						_players[i].rotation = rotate;
 					}
 				}
 			}
@@ -63,7 +64,7 @@ void Server::run() {
 
 		// Send position packets
 		for (unsigned int i = 0; i < playerNum; i++) {		
-			printf("Player ID: %d Position X: %d Position Y: %d\n", _players[i].id, (int)_players[i].position.x, (int)_players[i].position.y);
+			printf("Player ID: %d Position X: %f Position Y: %f Rotation: %f\n", _players[i].id, _players[i].position.x, _players[i].position.y, _players[i].rotation);
 			// Clear buffer
 			buffer[0] = 0;
 
@@ -73,7 +74,7 @@ void Server::run() {
 			for (unsigned int j = 0; j < playerNum; j++) {
 				if (i != j) {
 					char playerInfo[BUFFER_SIZE];
-					sprintf_s(playerInfo, " %d %d %d ", _players[j].id, (int)_players[j].position.x, (int)_players[j].position.y);
+					sprintf_s(playerInfo, " %d %f %f %f ", _players[j].id, _players[j].position.x, _players[j].position.y, _players[j].rotation);
 					strcat_s(buffer, playerInfo);
 				}
 			}  

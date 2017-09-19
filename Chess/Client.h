@@ -55,4 +55,9 @@ private:
 	bool running = true;
 
 	FR::VerticesInfo playerInfo;
+
+	bool _hasFocus = false;
+
+	int _screenWidth = 400;
+	int _screenHeight = 400;
 };
