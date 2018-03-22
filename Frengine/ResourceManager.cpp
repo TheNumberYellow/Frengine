@@ -28,7 +28,7 @@ Texture2D* ResourceManager::getTexture(std::string textureName) {
 	return it->second;
 }
 
-void ResourceManager::loadTexture(std::string filePath, std::string name) {
+Texture2D* ResourceManager::loadTexture(std::string filePath, std::string name) {
 	// Flip vertically
 	stbi_set_flip_vertically_on_load(true);
 
@@ -38,7 +38,7 @@ void ResourceManager::loadTexture(std::string filePath, std::string name) {
 
 	if (imgData == nullptr) {
 		printf("ResourceManager Error: Invalid image file. (File likely missing or corrupted) \n");
-		return;
+		return nullptr;
 	}
 
 	// TEMP
@@ -65,7 +65,7 @@ void ResourceManager::loadTexture(std::string filePath, std::string name) {
 	// Free texture data
 	stbi_image_free(imgData);
 
-	return;
+	return getTexture(name);
 }
 
 ShaderProgram* ResourceManager::getShader(std::string shaderName) {
@@ -79,11 +79,13 @@ ShaderProgram* ResourceManager::getShader(std::string shaderName) {
 	return it->second;
 }
 
-void ResourceManager::loadShaderProgram(std::string vertFilePath, std::string fragFilePath, std::string name) {
+ShaderProgram* ResourceManager::loadShaderProgram(std::string vertFilePath, std::string fragFilePath, std::string name) {
 	FR::ShaderProgram* newProgram = new FR::ShaderProgram();
 	newProgram->compileProgram(vertFilePath, fragFilePath);
 
 	_shaders[name] = newProgram;
+
+	return getShader(name);
 }
 
 

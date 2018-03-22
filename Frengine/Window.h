@@ -5,12 +5,17 @@
 #include <string>
 
 namespace FR {
+	struct Colour {
+		Colour(float _r, float _g, float _b) : r(_r), g(_g), b(_b) {}
+		float r, g, b;
+	};
+
 	class Window {
 	public:
 		Window();
 		~Window();
 
-		void create(std::string windowName, int screenWidth, int screenHeight, unsigned int windowFlags);
+		void create(std::string windowName, int screenWidth, int screenHeight, unsigned int windowFlags, Colour clearColour = Colour(1.0f, 0.078f, 0.578f));
 		void swapBuffer();
 		
 		void clear();
@@ -18,6 +23,8 @@ namespace FR {
 
 		int getScreenWidth() { return _screenWidth; }
 		int getScreenHeight() { return _screenHeight; }
+
+		void setWindowSize(int width, int height);
 
 		SDL_Window* getWindow();
 

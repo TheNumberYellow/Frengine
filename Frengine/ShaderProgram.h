@@ -14,6 +14,8 @@ namespace FR {
 		void compileProgram(std::string vertFilePath, std::string fragFilePath);
 		GLuint getAttribLocation(std::string attribName);
 
+		static void unuseShaders();
+
 		void setUniformMat4(std::string uniformName, const glm::mat4& value);
 
 		void use();

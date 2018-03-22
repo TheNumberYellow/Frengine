@@ -1,4 +1,5 @@
 #pragma once
+
 #include <SDL_net.h>
 #include <SDL2\SDL.h>
 
@@ -35,21 +36,29 @@ private:
 	FR::ShaderProgram* shader0;
 	FR::Camera3D camera;
 
-	std::map<int, FR::Sprite> players;
+	std::map<int, FR::Mesh> players;
+	std::map<int, FR::Mesh> mPlayers;
+
 
 	GLfloat forwardSpeed = 0;
 	GLfloat strafeSpeed = 0;
 
 	glm::vec2 myPosition;
 	glm::vec2 mySpeed;
-	FR::Sprite me;
+	FR::Mesh me;
 	FR::Sprite board;
 
 	FR::Mesh testMesh;
+	FR::Mesh* woodMesh;
+
+	FR::Mesh meshy;
 
 	FR::Texture2D* boardTexture;
 	FR::Texture2D* pawnTexture;
 	FR::Texture2D* blackPawnTexture;
+	FR::Texture2D* woodTexture;
+	FR::Texture2D* metalTexture;
+
 
 	char buffer[BUFFER_SIZE];
 	bool running = true;
@@ -57,7 +66,8 @@ private:
 	FR::VerticesInfo playerInfo;
 
 	bool _hasFocus = false;
+	bool _spacePressed = false;
 
-	int _screenWidth = 400;
-	int _screenHeight = 400;
+	int _screenWidth = 800;
+	int _screenHeight = 800;
 };

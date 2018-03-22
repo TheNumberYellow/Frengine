@@ -5,6 +5,8 @@
 #include "ShaderProgram.h"
 #include "GLTexture.h"
 
+#include <vector>
+
 namespace FR {
 	enum DrawMode {
 		FR_TRIANGLES,
@@ -22,8 +24,8 @@ namespace FR {
 
 namespace FR {
 	typedef struct {
-		GLfloat* vertices;
-		GLuint* elements;
+		std::vector<GLfloat> vertices;
+		std::vector<GLuint> elements;
 	} VerticesInfo;
 }
 
@@ -52,5 +54,11 @@ namespace FR {
 		GLfloat _rotationZ;
 
 		Texture2D* _texture;
+		
+		glm::mat4 _modelMatrix;
+
+		void updateModelMatrix();
+
+		bool _needsModelMatrixUpdate = true;
 	};
 }

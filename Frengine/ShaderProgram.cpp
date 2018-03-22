@@ -43,6 +43,10 @@ GLuint FR::ShaderProgram::getAttribLocation(std::string attribName) {
 	return glGetAttribLocation(_programID, attribName.c_str());
 }
 
+void FR::ShaderProgram::unuseShaders() {
+	glUseProgram(0);
+}
+
 void FR::ShaderProgram::setUniformMat4(std::string uniformName, const glm::mat4& value) {
 	glUniformMatrix4fv(glGetUniformLocation(_programID, uniformName.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }

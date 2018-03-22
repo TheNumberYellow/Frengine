@@ -5,6 +5,10 @@ using namespace FR;
 Sprite::Sprite() {
 }
 
+FR::Sprite::Sprite(glm::vec2 position, glm::vec2 size, GLfloat rotation, Texture2D* texture) {
+	this->create(position, size, rotation, texture);
+}
+
 
 Sprite::~Sprite() {
 }
@@ -74,10 +78,17 @@ void FR::Sprite::create(glm::vec2 position, glm::vec2 size, GLfloat rotation, Te
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+void FR::Sprite::createVertices() {
+
+
+}
+
 void FR::Sprite::setPos(glm::vec2 newPos) {
 	glm::vec3 newPos3x3{ newPos.x, newPos.y, 0 };
 
 	_position = newPos3x3;
+
+	_needsModelMatrixUpdate = true;
 }
 
 glm::vec2 FR::Sprite::getPos() {
@@ -86,6 +97,8 @@ glm::vec2 FR::Sprite::getPos() {
 
 void FR::Sprite::setRot(GLfloat newRot) {
 	_rotationZ = newRot;
+
+	_needsModelMatrixUpdate = true;
 }
 
 GLfloat FR::Sprite::getRot() {
@@ -94,6 +107,8 @@ GLfloat FR::Sprite::getRot() {
 
 void FR::Sprite::setScale(glm::vec2 newScale) {
 	_scale = glm::vec3(newScale.x, newScale.y, 1.0);
+
+	_needsModelMatrixUpdate = true;
 }
 
 glm::vec2 FR::Sprite::getScale() {

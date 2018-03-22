@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.3
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Frengine", "Frengine\Frengine.vcxproj", "{AE8465BE-D779-4077-A9A9-FFCACD473AA5}"
 EndProject
@@ -11,6 +11,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FrengineTest", "FrengineTes
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessOnline", "Chess\Chess.vcxproj", "{7D5C0FCB-FB5F-4C26-87FB-5B323793D3D9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AE8465BE-D779-4077-A9A9-FFCACD473AA5} = {AE8465BE-D779-4077-A9A9-FFCACD473AA5}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpaceGame", "TestPlatformer\TestPlatformer.vcxproj", "{DD65C531-B03B-4E78-8950-7A4CF629FD54}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AE8465BE-D779-4077-A9A9-FFCACD473AA5} = {AE8465BE-D779-4077-A9A9-FFCACD473AA5}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpinnyPlatformer", "SpinnyPlatformer\SpinnyPlatformer.vcxproj", "{307124C1-8325-489E-8F66-1DF1082020F3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{AE8465BE-D779-4077-A9A9-FFCACD473AA5} = {AE8465BE-D779-4077-A9A9-FFCACD473AA5}
 	EndProjectSection
@@ -48,6 +58,22 @@ Global
 		{7D5C0FCB-FB5F-4C26-87FB-5B323793D3D9}.Release|x64.Build.0 = Release|x64
 		{7D5C0FCB-FB5F-4C26-87FB-5B323793D3D9}.Release|x86.ActiveCfg = Release|Win32
 		{7D5C0FCB-FB5F-4C26-87FB-5B323793D3D9}.Release|x86.Build.0 = Release|Win32
+		{DD65C531-B03B-4E78-8950-7A4CF629FD54}.Debug|x64.ActiveCfg = Debug|x64
+		{DD65C531-B03B-4E78-8950-7A4CF629FD54}.Debug|x64.Build.0 = Debug|x64
+		{DD65C531-B03B-4E78-8950-7A4CF629FD54}.Debug|x86.ActiveCfg = Debug|Win32
+		{DD65C531-B03B-4E78-8950-7A4CF629FD54}.Debug|x86.Build.0 = Debug|Win32
+		{DD65C531-B03B-4E78-8950-7A4CF629FD54}.Release|x64.ActiveCfg = Release|x64
+		{DD65C531-B03B-4E78-8950-7A4CF629FD54}.Release|x64.Build.0 = Release|x64
+		{DD65C531-B03B-4E78-8950-7A4CF629FD54}.Release|x86.ActiveCfg = Release|Win32
+		{DD65C531-B03B-4E78-8950-7A4CF629FD54}.Release|x86.Build.0 = Release|Win32
+		{307124C1-8325-489E-8F66-1DF1082020F3}.Debug|x64.ActiveCfg = Debug|x64
+		{307124C1-8325-489E-8F66-1DF1082020F3}.Debug|x64.Build.0 = Debug|x64
+		{307124C1-8325-489E-8F66-1DF1082020F3}.Debug|x86.ActiveCfg = Debug|Win32
+		{307124C1-8325-489E-8F66-1DF1082020F3}.Debug|x86.Build.0 = Debug|Win32
+		{307124C1-8325-489E-8F66-1DF1082020F3}.Release|x64.ActiveCfg = Release|x64
+		{307124C1-8325-489E-8F66-1DF1082020F3}.Release|x64.Build.0 = Release|x64
+		{307124C1-8325-489E-8F66-1DF1082020F3}.Release|x86.ActiveCfg = Release|Win32
+		{307124C1-8325-489E-8F66-1DF1082020F3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

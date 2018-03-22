@@ -15,9 +15,12 @@ struct Player {
 	int id;
 	Uint32 timeout;
 	glm::vec2 position;
+	glm::vec3 mPosition;
 	float rotation;
-	Player(TCPsocket _socket, int _id, Uint32 _timeout, glm::vec2 _position, float _rotation) : socket(_socket), timeout(_timeout), id(_id), position(_position), rotation(_rotation) {}
+	float rotation3D;
+	Player(TCPsocket _socket, int _id, Uint32 _timeout, glm::vec2 _position, glm::vec3 _mPosition, float _rotation, float _rotation3D) : socket(_socket), timeout(_timeout), id(_id), position(_position), mPosition(_mPosition), rotation(_rotation), rotation3D(_rotation3D) {}
 };
+
 
 class Server {
 public:

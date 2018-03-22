@@ -12,12 +12,12 @@ namespace FR {
 		// Retrieve stored texture
 		static Texture2D* getTexture(std::string textureName);
 		// Load texture from file
-		static void loadTexture(std::string filePath, std::string name);
+		static Texture2D* loadTexture(std::string filePath, std::string name);
 
 		// Retrieve stored shader
 		static ShaderProgram* getShader(std::string shaderName);
 		// Load, compile and link shader program from shader files
-		static void loadShaderProgram(std::string vertFilePath, std::string fragFilePath, std::string name);
+		static ShaderProgram* loadShaderProgram(std::string vertFilePath, std::string fragFilePath, std::string name);
 
 		static void unbindTexture();
 		static void unuseShader();

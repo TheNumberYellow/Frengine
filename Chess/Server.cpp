@@ -31,7 +31,7 @@ void Server::run() {
 		if (tempSocket) {
 			if (playerNum < MAX_PLAYERS) {
 				SDLNet_TCP_AddSocket(_socketSet, tempSocket);
-				_players.emplace_back(tempSocket, currentID, SDL_GetTicks(), glm::vec2(0, 0), 0);
+				_players.emplace_back(tempSocket, currentID, SDL_GetTicks(), glm::vec2(0, 0), glm::vec3(0, 0, 5), 0, 0);
 				playerNum++;
 				sprintf_s(buffer, "0 %d \n", currentID);
 				printf("New connection with ID %d.\n", currentID);
@@ -53,10 +53,13 @@ void Server::run() {
 						playerNum--;
 					}
 					else {
-						float posX, posY, rotate;
-						sscanf_s(buffer, "1 %f %f %f", &posX, &posY, &rotate);
+						float posX, posY, rotate, rotate3D;
+						float camX, camY, camZ;
+						sscanf_s(buffer, "1 %f %f %f %f %f %f %f", &posX, &posY, &rotate, &camX, &camY, &camZ, &rotate3D);
 						_players[i].position = glm::vec2(posX, posY);
 						_players[i].rotation = rotate;
+						_players[i].mPosition = glm::vec3(camX, camY, camZ);
+						_players[i].rotation3D = rotate3D;
 					}
 				}
 			}
@@ -64,17 +67,17 @@ void Server::run() {
 
 		// Send position packets
 		for (unsigned int i = 0; i < playerNum; i++) {		
-			printf("Player ID: %d Position X: %f Position Y: %f Rotation: %f\n", _players[i].id, _players[i].position.x, _players[i].position.y, _players[i].rotation);
+			//printf("Player ID: %d Position X: %f Position Y: %f Rotation: %f\n", _players[i].id, _players[i].position.x, _players[i].position.y, _players[i].rotation);
 			// Clear buffer
 			buffer[0] = 0;
 
 			// Send number of other players
-			sprintf_s(buffer, "%d", playerNum - 1);
+			sprintf_s(buffer, "123 %d", playerNum - 1);
 
 			for (unsigned int j = 0; j < playerNum; j++) {
 				if (i != j) {
 					char playerInfo[BUFFER_SIZE];
-					sprintf_s(playerInfo, " %d %f %f %f ", _players[j].id, _players[j].position.x, _players[j].position.y, _players[j].rotation);
+					sprintf_s(playerInfo, " %d %f %f %f %f %f %f %f ", _players[j].id, _players[j].position.x, _players[j].position.y, _players[j].rotation, _players[j].mPosition.x, _players[j].mPosition.y, _players[j].mPosition.z, _players[j].rotation3D);
 					strcat_s(buffer, playerInfo);
 				}
 			}  

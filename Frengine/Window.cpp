@@ -13,7 +13,7 @@ Window::~Window() {
 	SDL_DestroyWindow(_window);
 }
 
-void Window::create(std::string windowName, int screenWidth, int screenHeight, unsigned int windowFlags) {
+void Window::create(std::string windowName, int screenWidth, int screenHeight, unsigned int windowFlags, Colour clearColour) {
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	unsigned int flags = SDL_WINDOW_OPENGL | windowFlags;
@@ -36,11 +36,14 @@ void Window::create(std::string windowName, int screenWidth, int screenHeight, u
 		fatalError("GLEW initialization error.");
 	}
 
+#if _DEBUG
 	//Check OpenGL version
 	std::printf("~~~ Open GL Version: %s ~~~\n", glGetString(GL_VERSION));
+#endif
 
 	// Set clear colour
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	// NICE BRIGHT PINK FOR VISIBILITY OwO
+	glClearColor(clearColour.r, clearColour.g, clearColour.b, 1.0f);
 
 	// Set blending mode
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -48,6 +51,9 @@ void Window::create(std::string windowName, int screenWidth, int screenHeight, u
 
 	_screenWidth = screenWidth;
 	_screenHeight = screenHeight;
+
+	// TEMP
+	SDL_GL_SetSwapInterval(0);
 }
 
 
@@ -61,6 +67,12 @@ void FR::Window::clear() {
 
 void Window::clear(GLuint bufferBit) {
 	glClear(bufferBit);
+}
+
+void FR::Window::setWindowSize(int width, int height) {
+	_screenWidth = width;
+	_screenHeight = height;
+	SDL_SetWindowSize(_window, width, height);
 }
 
 SDL_Window* FR::Window::getWindow() {
