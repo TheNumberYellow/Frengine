@@ -9,7 +9,6 @@ namespace FR {
 		~Sprite();
 
 		void create(glm::vec2 position, glm::vec2 size, GLfloat rotation, Texture2D* texture);
-		void createVertices();
 
 		void setPos(glm::vec2 newPos);
 		glm::vec2 getPos();
@@ -19,6 +18,12 @@ namespace FR {
 
 		void setScale(glm::vec2 newScale);
 		glm::vec2 getScale();
+
+		static void initRenderData();
+
+		// All sprites will use same vertex array object (same simple quad)
+		static GLuint _staticVAO;
+	private:
 
 	};
 }

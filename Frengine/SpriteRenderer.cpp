@@ -57,6 +57,8 @@ void FR::SpriteRenderer::initRenderData() {
 	glGenVertexArrays(1, &this->_quadVAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
+	
+	glBindVertexArray(this->_quadVAO);
 
 	// Copy vertex data to vertex buffer object
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -68,7 +70,6 @@ void FR::SpriteRenderer::initRenderData() {
 
 
 	// Set up vertex attribute pointers
-	glBindVertexArray(this->_quadVAO);
 	
 	// Positions
 	glEnableVertexAttribArray(0);

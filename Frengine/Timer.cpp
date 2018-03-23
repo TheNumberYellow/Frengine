@@ -7,8 +7,8 @@ int64_t Timer::TICKS_PER_SECOND;
 int64_t Timer::currTickCount;
 
 void Timer::initTimer() {
+	// Performance frequecy is fixed at system boot and is consistent across all processors
 	QueryPerformanceFrequency((LARGE_INTEGER *)&TICKS_PER_SECOND);
-
 	QueryPerformanceCounter((LARGE_INTEGER *)&currTickCount);
 
 }
