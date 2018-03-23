@@ -129,8 +129,6 @@ int main(int argc, char** argv) {
 	FR::Window window;
 
 	window.create("Platformer", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE);
-	
-	FR::Sprite::initRenderData();
 
 	FR::Texture2D* space = FR::ResourceManager::loadTexture("Images/space.jpg", "space");
 	FR::Texture2D* blueSpace = FR::ResourceManager::loadTexture("Images/blueSpace.png", "blueSpace");

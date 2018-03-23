@@ -2,11 +2,17 @@
 using namespace FR;
 
 GLuint Sprite::_staticVAO;
+bool Sprite::_isVAOInitialized = false;
 
 Sprite::Sprite() {
 }
 
 FR::Sprite::Sprite(glm::vec2 position, glm::vec2 size, GLfloat rotation, Texture2D* texture) {
+	/// TODO: Not sure if there isn't a better way to do this
+	if (!_isVAOInitialized) {
+		Sprite::initRenderData();
+		_isVAOInitialized = true;
+	}
 	this->create(position, size, rotation, texture);
 }
 

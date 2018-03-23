@@ -18,12 +18,12 @@ namespace FR {
 
 		void setScale(glm::vec2 newScale);
 		glm::vec2 getScale();
+	private:
 
 		static void initRenderData();
 
 		// All sprites will use same vertex array object (same simple quad)
 		static GLuint _staticVAO;
-	private:
-
+		static bool _isVAOInitialized;
 	};
 }

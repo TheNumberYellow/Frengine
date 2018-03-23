@@ -20,7 +20,7 @@ void Drawable::draw(ShaderProgram* shader) {
 
 	updateModelMatrix();
 	shader->setUniformMat4("model", _modelMatrix);
-
+	
 	// Determine draw mode
 	GLenum glDrawMode;
 
