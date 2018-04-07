@@ -128,6 +128,7 @@
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="Errors.h" />
     <ClInclude Include="GLTexture.h" />
+    <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ShaderProgram.h" />
@@ -144,6 +145,7 @@
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="Errors.cpp" />
     <ClCompile Include="GLTexture.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />

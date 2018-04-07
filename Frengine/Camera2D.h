@@ -13,6 +13,7 @@ namespace FR {
 		void attach(ShaderProgram* shader);
 		void update();
 
+		void moveCam(glm::vec2 offset);
 		void setCamSize(glm::vec2 newSize);
 
 		void setCamPos(glm::vec2 newPos);

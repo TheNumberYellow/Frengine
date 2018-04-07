@@ -35,6 +35,13 @@ void FR::Camera2D::update() {
 	_shader->setUniformMat4("view", _view);
 }
 
+void FR::Camera2D::moveCam(glm::vec2 offset) {
+	_cameraPosition.x += offset.x;
+	_cameraPosition.y += offset.y;
+
+	_needsViewMatrixUpdate = true;
+}
+
 void FR::Camera2D::setCamSize(glm::vec2 newSize) {
 	_cameraSize = newSize;
 	if (_shader != nullptr) {
