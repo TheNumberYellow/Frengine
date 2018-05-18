@@ -7,11 +7,13 @@ FR::Texture2D::Texture2D() :
 	_width(0), _height(0),
 	_internalFormat(GL_RGB),
 	_imageFormat(GL_RGB),
-	_textureMinFilter(GL_LINEAR),
-	_textureMagFilter(GL_LINEAR)
+	_textureMinFilter(GL_NEAREST),
+	_textureMagFilter(GL_NEAREST)
 {
 	glGenTextures(1, &_id);
+#if _DEBUG
 	printf("Texture ID: %u\n", _id);
+#endif
 }
 
 FR::Texture2D::~Texture2D() {

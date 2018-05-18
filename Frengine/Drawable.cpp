@@ -56,6 +56,11 @@ void FR::Drawable::setRot(GLfloat newRot) {
 	_needsModelMatrixUpdate = true;
 }
 
+glm::vec3 FR::Drawable::getPos()
+{
+	return _position;
+}
+
 void FR::Drawable::updateModelMatrix() {
 	if (!_needsModelMatrixUpdate)
 		return;

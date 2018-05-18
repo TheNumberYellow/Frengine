@@ -52,8 +52,23 @@ glm::vec2 FR::Sprite::getPos() {
 	return glm::vec2(_position.x, _position.y);
 }
 
+void FR::Sprite::move(glm::vec2 movement)
+{
+	glm::vec3 newPos3x3{ movement.x, movement.y, 0 };
+
+	_position += newPos3x3;
+
+	_needsModelMatrixUpdate = true;
+}
+
 void FR::Sprite::setRot(GLfloat newRot) {
 	_rotationZ = newRot;
+
+	_needsModelMatrixUpdate = true;
+}
+
+void FR::Sprite::rotate(GLfloat rotation) {
+	_rotationZ += rotation;
 
 	_needsModelMatrixUpdate = true;
 }

@@ -31,7 +31,14 @@ void FR::Keyboard::update(SDL_Event event) {
 	case SDLK_d:
 		_keyboard[K_RIGHT] = isPressed;
 		break;
+	case SDLK_q:
+		_keyboard[K_q] = isPressed;
+		break;
+	case SDLK_e:
+		_keyboard[K_e] = isPressed;
+		break;
 	}
+
 }
 
 bool FR::Keyboard::isPressed(Key key) {

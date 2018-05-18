@@ -39,6 +39,7 @@ namespace FR {
 
 		void setPos(glm::vec3 newPos);
 		void setRot(GLfloat newRot);
+		glm::vec3 getPos();
 
 	protected:
 		GLuint _VBO, _VAO, _EBO;

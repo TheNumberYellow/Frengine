@@ -127,6 +127,7 @@
     <ClInclude Include="Camera3D.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="Errors.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="GLTexture.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mesh.h" />
@@ -144,6 +145,7 @@
     <ClCompile Include="Camera3D.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="Errors.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="GLTexture.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mesh.cpp" />

@@ -18,12 +18,17 @@ namespace FR {
 		static ShaderProgram* getShader(std::string shaderName);
 		// Load, compile and link shader program from shader files
 		static ShaderProgram* loadShaderProgram(std::string vertFilePath, std::string fragFilePath, std::string name);
+		static ShaderProgram* getDefaultShader();
 
 		static void unbindTexture();
 		static void unuseShader();
 	private:
 		static std::map<std::string, Texture2D*> _textures;
 		static std::map<std::string, ShaderProgram*> _shaders;
+		static ShaderProgram* defaultShader;
 
+		static bool defaultShaderLoaded;
+		
+		static ShaderProgram* loadDefaultShader();
 	};
 }

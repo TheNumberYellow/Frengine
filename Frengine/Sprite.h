@@ -12,8 +12,10 @@ namespace FR {
 
 		void setPos(glm::vec2 newPos);
 		glm::vec2 getPos();
+		void move(glm::vec2 movement);
 
 		void setRot(GLfloat newRot);
+		void rotate(GLfloat rotation);
 		GLfloat getRot();
 
 		void setScale(glm::vec2 newScale);

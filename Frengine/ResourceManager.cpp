@@ -16,7 +16,8 @@ using namespace FR;
 std::map<std::string, Texture2D*> ResourceManager::_textures;
 std::map<std::string, ShaderProgram*> ResourceManager::_shaders;
 
-
+bool ResourceManager::defaultShaderLoaded = false;
+ShaderProgram* ResourceManager::defaultShader = nullptr;
 
 Texture2D* ResourceManager::getTexture(std::string textureName) {
 	std::map<std::string, Texture2D*>::iterator it = _textures.find(textureName);
@@ -40,9 +41,6 @@ Texture2D* ResourceManager::loadTexture(std::string filePath, std::string name) 
 		printf("ResourceManager Error: Invalid image file. (File likely missing or corrupted) \n");
 		return nullptr;
 	}
-
-	// TEMP
-	//printf("Channels in file loaded: %i.\n", channels);
 
 	// Generate texture
 	Texture2D* newTexture = new Texture2D;
@@ -81,11 +79,33 @@ ShaderProgram* ResourceManager::getShader(std::string shaderName) {
 
 ShaderProgram* ResourceManager::loadShaderProgram(std::string vertFilePath, std::string fragFilePath, std::string name) {
 	FR::ShaderProgram* newProgram = new FR::ShaderProgram();
-	newProgram->compileProgram(vertFilePath, fragFilePath);
+	newProgram->compileProgramFromFile(vertFilePath, fragFilePath);
 
 	_shaders[name] = newProgram;
 
 	return getShader(name);
+}
+
+ShaderProgram* FR::ResourceManager::getDefaultShader()
+{
+	if (defaultShaderLoaded) {
+		return defaultShader;
+	}
+	else {
+		return loadDefaultShader();
+	}
+}
+
+ShaderProgram* FR::ResourceManager::loadDefaultShader() {
+	FR::ShaderProgram* newProgram = new FR::ShaderProgram();
+	
+	newProgram->compileDefaultProgram();
+
+	defaultShader = newProgram;
+
+	defaultShaderLoaded = true;
+
+	return defaultShader;
 }
 
 

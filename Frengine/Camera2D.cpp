@@ -46,10 +46,14 @@ void FR::Camera2D::setCamSize(glm::vec2 newSize) {
 	_cameraSize = newSize;
 	if (_shader != nullptr) {
 		_shader->use();
-		glm::mat4 projectionMatrix = glm::ortho(-_cameraSize.x / 2, _cameraSize.x / 2, -_cameraSize.y / 2, _cameraSize.y / 2);
+		glm::mat4 projectionMatrix = glm::ortho(-_cameraSize.x / 2.0, _cameraSize.x / 2.0, -_cameraSize.y / 2.0, _cameraSize.y / 2.0);
 		_shader->setUniformMat4("projection", projectionMatrix);
 	}
+	update();
+}
 
+glm::vec2 FR::Camera2D::getCamSize() {
+	return _cameraSize;
 }
 
 void FR::Camera2D::setCamPos(glm::vec2 newPos) {
@@ -62,6 +66,12 @@ void FR::Camera2D::setCamPos(glm::vec2 newPos) {
 
 glm::vec2 FR::Camera2D::getCamPos() {
 	return glm::vec2(_cameraPosition.x, _cameraPosition.y);
+}
+
+void FR::Camera2D::rotate(double rotation) {
+	_cameraRotation += rotation;
+
+	_needsCamRotUpdate = true;
 }
 
 void FR::Camera2D::setCamRot(double newRot) {

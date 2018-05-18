@@ -8,7 +8,9 @@ namespace FR {
 		K_UP,
 		K_DOWN,
 		K_LEFT,
-		K_RIGHT
+		K_RIGHT,
+		K_q,
+		K_e
 	};
 
 	class Keyboard {

@@ -4,8 +4,35 @@
 #include <glm\glm.hpp>
 #include <glm\gtc\type_ptr.hpp>
 
+#include <iostream>
+
 using namespace FR;
 
+static const std::string defaultFragShaderString = 
+"#version 400\n"
+"in vec2 fragmentUV;\n"
+"out vec4 fragColour;\n"
+"uniform sampler2D sampler;\n"
+"void main() {\n"
+"	vec4 colour = texture(sampler, fragmentUV);\n"
+"	fragColour = colour;\n"
+"}"
+;
+
+static const std::string defaultVertShaderString =
+"#version 400\n"
+"layout(location = 0) in vec3 vertexPosition;\n"
+"layout(location = 1) in vec2 vertexUV;\n"
+"out vec2 fragmentUV;\n"
+"uniform mat4 projection;\n"
+"uniform mat4 model;\n"
+"uniform mat4 view;\n"
+"void main() {\n"
+"	fragmentUV = vertexUV;\n"
+"	//gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\n"
+"	gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\n"
+"}"
+;
 
 ShaderProgram::ShaderProgram() {
 
@@ -16,27 +43,15 @@ ShaderProgram::~ShaderProgram() {
 	glDeleteProgram(_programID);
 }
 
-void ShaderProgram::compileProgram(std::string vertFilePath, std::string fragFilePath) {\
-	_programID = glCreateProgram();
+void ShaderProgram::compileProgramFromFile(std::string vertFilePath, std::string fragFilePath) {
+	std::string vertShaderString = loadTextFile(vertFilePath);
+	std::string fragShaderString = loadTextFile(fragFilePath);
+	
+	compileProgramFromString(vertShaderString, fragShaderString);
+}
 
-	_vertShaderID = glCreateShader(GL_VERTEX_SHADER);
-	_fragShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-
-	compileShader(vertFilePath, _vertShaderID);
-	compileShader(fragFilePath, _fragShaderID);
-
-	// Attach shaders to program
-	glAttachShader(_programID, _vertShaderID);
-	glAttachShader(_programID, _fragShaderID);
-
-	// Link program
-	glLinkProgram(_programID);
-
-	// Detach and delete shaders afterwards
-	glDetachShader(_programID, _vertShaderID);
-	glDetachShader(_programID, _fragShaderID);
-	glDeleteShader(_vertShaderID);
-	glDeleteShader(_fragShaderID);
+void FR::ShaderProgram::compileDefaultProgram() {
+	compileProgramFromString(defaultVertShaderString, defaultFragShaderString);
 }
 
 GLuint FR::ShaderProgram::getAttribLocation(std::string attribName) {
@@ -55,9 +70,8 @@ void ShaderProgram::use() {
 	glUseProgram(_programID);
 }
 
-void ShaderProgram::compileShader(std::string filePath, GLuint shaderID) {
-	std::string shaderText = loadTextFile(filePath);
-
+void ShaderProgram::compileShaderFromString(std::string shaderText, GLuint shaderID) {
+	
 	const char* cStrShaderText = shaderText.c_str();
 
 	glShaderSource(shaderID, 1, &cStrShaderText, NULL);
@@ -75,8 +89,32 @@ void ShaderProgram::compileShader(std::string filePath, GLuint shaderID) {
 
 		glDeleteShader(shaderID);
 
-		std::printf("||| Compilation of shader %s failed, error log:\n%s\n", filePath.c_str(), &(errorLog[0]));
+		std::printf("||| Compilation of shader failed, error log:\n%s\n", &(errorLog[0]));
 	}
+}
+
+void FR::ShaderProgram::compileProgramFromString(std::string vertShaderText, std::string fragShaderText) {
+	_programID = glCreateProgram();
+
+	_vertShaderID = glCreateShader(GL_VERTEX_SHADER);
+	_fragShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+
+	compileShaderFromString(vertShaderText, _vertShaderID);
+	compileShaderFromString(fragShaderText, _fragShaderID);
+
+	// Attach shaders to program
+	glAttachShader(_programID, _vertShaderID);
+	glAttachShader(_programID, _fragShaderID);
+
+	// Link program
+	glLinkProgram(_programID);
+
+	// Detach and delete shaders afterwards
+	glDetachShader(_programID, _vertShaderID);
+	glDetachShader(_programID, _fragShaderID);
+	glDeleteShader(_vertShaderID);
+	glDeleteShader(_fragShaderID);
+
 }
 
 std::string ShaderProgram::loadTextFile(std::string filePath) {

@@ -14,11 +14,14 @@ namespace FR {
 		void update();
 
 		void moveCam(glm::vec2 offset);
+
 		void setCamSize(glm::vec2 newSize);
+		glm::vec2 getCamSize();
 
 		void setCamPos(glm::vec2 newPos);
 		glm::vec2 getCamPos();
 
+		void rotate(double rotation);
 		void setCamRot(double newRot);
 		double getCamRot();
 

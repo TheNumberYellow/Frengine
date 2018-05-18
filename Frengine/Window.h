@@ -25,11 +25,13 @@ namespace FR {
 		int getScreenHeight() { return _screenHeight; }
 
 		void setWindowSize(int width, int height);
+		void setWindowTitle(std::string newTitle);
 
 		SDL_Window* getWindow();
 
 	private:
 		SDL_Window* _window;
+		SDL_GLContext glContext;
 		int _screenWidth, _screenHeight;
 	};
 }

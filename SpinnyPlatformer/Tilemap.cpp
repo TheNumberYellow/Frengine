@@ -16,11 +16,12 @@ void Tilemap::draw(FR::ShaderProgram* shader) {
 	}
 }
 
-void Tilemap::create(std::vector<FR::Texture2D*> tileTextures, std::vector<int> tiles, int tileCountX, int tileCountY) {
+void Tilemap::create(std::vector<FR::Texture2D*> tileTextures, std::vector<int> tiles, int tileCountX, int tileCountY, glm::vec2 tileSize) {
 	_tileCountX = tileCountX;
 	_tileCountY = tileCountY;
 
 	_tileNums = tiles;
+	_tileSize = tileSize;
 
 	for (int i = 0; i < tiles.size(); ++i) {
 		// Negative value denotes no tile
@@ -28,13 +29,13 @@ void Tilemap::create(std::vector<FR::Texture2D*> tileTextures, std::vector<int> 
 			continue;
 		}
 
-		int tilePosX = i % tileCountX;
-		int tilePosY = i / tileCountX;
+		int tilePosX = tileCountX - (i % tileCountX) - 1;
+		int tilePosY = tileCountY - (i / tileCountX) - 1;
+		//int tilePosX = (i % tileCountX);
+		//int tilePosY = (i / tileCountX);
 
-		float tileWidth = 80;
-		float tileHeight = 80;
-
-		FR::Sprite* newSprite = new FR::Sprite(glm::vec2(tilePosX * tileWidth, tilePosY * tileHeight), glm::vec2(tileWidth, tileHeight), 0, tileTextures[tiles[i]]);
+		
+		FR::Sprite* newSprite = new FR::Sprite(glm::vec2(tilePosX * tileSize.x, tilePosY * tileSize.y), tileSize, 0, tileTextures[tiles[i]]);
 
 		_tiles.push_back(newSprite);
 	}

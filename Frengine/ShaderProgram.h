@@ -11,7 +11,9 @@ namespace FR {
 		ShaderProgram();
 		~ShaderProgram();
 
-		void compileProgram(std::string vertFilePath, std::string fragFilePath);
+		void compileProgramFromFile(std::string vertFilePath, std::string fragFilePath);
+		void compileDefaultProgram();
+
 		GLuint getAttribLocation(std::string attribName);
 
 		static void unuseShaders();
@@ -25,8 +27,11 @@ namespace FR {
 		GLuint _vertShaderID;
 		GLuint _fragShaderID;
 
-		void compileShader(std::string filePath, GLuint shaderID);
+		void compileShaderFromString(std::string shaderText, GLuint shaderID);
+		void compileProgramFromString(std::string vertShaderText, std::string fragShaderText);
 
 		std::string loadTextFile(std::string filePath);
+		
+
 	};
 }
